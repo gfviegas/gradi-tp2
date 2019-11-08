@@ -1,0 +1,36 @@
+version: '2'
+
+networks:
+  gradi-tp2:
+    driver: bridge
+
+
+services:
+  transactional:
+    image: postgres
+    volumes:
+      - ./postgresql/transactional/data:/var/lib/postgresql/data
+      - ./postgresql/transactional/init:/docker-entrypoint-initdb.d
+      - ./postgresql/transactional/posgresql.conf:/etc/postgresql/postgresql.conf
+      - ./postgresql/transactional/posgresql.conf:/etc/postgresql/data/postgresql.conf
+    ports:
+      - "5432:5432"
+    networks:
+      - gradi-tp2
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: seguradora
+
+  admin:
+    image: dpage/pgadmin4
+    networks:
+      - postgres-compose-network
+    ports:
+      - 80:80
+    networks:
+      - gradi-tp2
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "gradi@ufv.br"
+      PGADMIN_DEFAULT_PASSWORD: "admin123"
+      PGADMIN_CONFIG_CONSOLE_LOG_LEVEL: 40
