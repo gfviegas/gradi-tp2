@@ -6,11 +6,23 @@ networks:
 
 
 services:
+  copy:
+    build:
+      context: ./copy-maker
+      dockerfile: Dockerfile
+    image: python:3.7
+    volumes:
+      - ./:/home
+      - ./copy-maker:/code
+    working_dir: /code
+    command: bash
+
   transactional:
     image: postgres
     volumes:
-      - ./postgresql/transactional/data:/var/lib/postgresql/data
+      - ./copy-maker/output:/data/csv
       - ./postgresql/transactional/init:/docker-entrypoint-initdb.d
+      - ./postgresql/transactional/data:/etc/postgresql/data
       - ./postgresql/transactional/posgresql.conf:/etc/postgresql/postgresql.conf
       - ./postgresql/transactional/posgresql.conf:/etc/postgresql/data/postgresql.conf
     ports:

@@ -1,16 +1,9 @@
 # Configurando o projeto
 
-Coloque o arquivo de inserts do banco transacional, que não são versionados devido ao seu tamanho, em `./postgresql/transacional/init` com os nomes:
+Coloque o arquivo de inserts do banco transacional, que não são versionados devido ao seu tamanho, em `./copy-maker/input` com os nomes originais.
+Execute o comando `docker-compose run copy python3 main.py` para gerar os arquivos de inserção no banco de dados transcional. Aguarde este comando finalizar.
 
-- 02-insert-montadoras.sql
-- 03-insert-modelos.sql
-- 04-insert-clientes.sql
-- 05-insert-carros.sql
-- 06-insert-seguros.sql
-- 07-insert-sinistros.sql
-
-
-Suba o banco com `docker-compose up transactional`. Se for a primeira execução, vá tomar um café e aguardar uns bons 10 a 20 minutos.
+Suba o banco com `docker-compose up transactional`. Se for a primeira execução, os dados já serão inseridos, se a etapa anterior foi realizada corretamente.
 
 
 ## Subindo sistema PGAdmin
