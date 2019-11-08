@@ -1,4 +1,5 @@
 **/.DS_store
 postgresql/transactional/data
 postgresql/transactional/init/*
-!postgresql/transactional/init/01-creates.sql
+!postgresql/transactional/init/01-*
+!postgresql/transactional/init/08-*
