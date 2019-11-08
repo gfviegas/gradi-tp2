@@ -1,7 +1,16 @@
 # Configurando o projeto
 
-Coloque o arquivo de inserts do banco transacional em `./postgresql/transacional/init` com o nome `02-inserts.sql`.
-Suba o banco com `docker-compose up transactional`.
+Coloque o arquivo de inserts do banco transacional, que não são versionados devido ao seu tamanho, em `./postgresql/transacional/init` com os nomes:
+
+- 02-insert-montadoras.sql
+- 03-insert-modelos.sql
+- 04-insert-clientes.sql
+- 05-insert-carros.sql
+- 06-insert-seguros.sql
+- 07-insert-sinistros.sql
+
+
+Suba o banco com `docker-compose up transactional`. Se for a primeira execução, vá tomar um café e aguardar uns bons 10 a 20 minutos.
 
 
 ## Subindo sistema PGAdmin
