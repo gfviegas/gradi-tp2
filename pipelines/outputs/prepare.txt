@@ -1,0 +1,5 @@
+('ano',)
+('sinistro',)
+('cliente',)
+('seguro',)
+('veiculo',)

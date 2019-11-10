@@ -4,18 +4,43 @@ networks:
   gradi-tp2:
     driver: bridge
 
-
 services:
+  luigi:
+    build:
+      context: ./pipelines
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/home
+      - ./pipelines:/code
+    ports:
+      - 81:8082
+    networks:
+      - gradi-tp2
+    working_dir: /code
+    command: bash
   copy:
     build:
       context: ./copy-maker
       dockerfile: Dockerfile
-    image: python:3.7
     volumes:
       - ./:/home
       - ./copy-maker:/code
     working_dir: /code
     command: bash
+
+  datawarehouse:
+    image: postgres
+    volumes:
+      - ./postgresql/datawarehouse/init:/docker-entrypoint-initdb.d
+      - ./postgresql/datawarehouse/data:/etc/postgresql/data
+    ports:
+      - 5431:5432
+    networks:
+      - gradi-tp2
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: warehouse
 
   transactional:
     image: postgres
@@ -26,7 +51,7 @@ services:
       - ./postgresql/transactional/posgresql.conf:/etc/postgresql/postgresql.conf
       - ./postgresql/transactional/posgresql.conf:/etc/postgresql/data/postgresql.conf
     ports:
-      - "5432:5432"
+      - 5432:5432
     networks:
       - gradi-tp2
     environment:

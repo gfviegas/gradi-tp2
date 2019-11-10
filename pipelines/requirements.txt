@@ -1,0 +1,4 @@
+luigi
+psycopg2
+numpy
+pandas
