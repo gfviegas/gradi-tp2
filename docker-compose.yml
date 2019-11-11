@@ -5,34 +5,13 @@ networks:
     driver: bridge
 
 services:
-  luigi:
-    build:
-      context: ./pipelines
-      dockerfile: Dockerfile
-    volumes:
-      - ./:/home
-      - ./pipelines:/code
-    ports:
-      - 81:8082
-    networks:
-      - gradi-tp2
-    working_dir: /code
-    command: bash
-  copy:
-    build:
-      context: ./copy-maker
-      dockerfile: Dockerfile
-    volumes:
-      - ./:/home
-      - ./copy-maker:/code
-    working_dir: /code
-    command: bash
-
+  # BANCOS DE DADOS
   datawarehouse:
     image: postgres
     volumes:
       - ./postgresql/datawarehouse/init:/docker-entrypoint-initdb.d
-      - ./postgresql/datawarehouse/data:/etc/postgresql/data
+      - ./postgresql/datawarehouse/data:/var/lib/postgresql/data
+      - ./postgresql/datawarehouse/postgresql.conf:/var/lib/postgresql/postgresql.conf
     ports:
       - 5431:5432
     networks:
@@ -47,9 +26,8 @@ services:
     volumes:
       - ./copy-maker/output:/data/csv
       - ./postgresql/transactional/init:/docker-entrypoint-initdb.d
-      - ./postgresql/transactional/data:/etc/postgresql/data
-      - ./postgresql/transactional/posgresql.conf:/etc/postgresql/postgresql.conf
-      - ./postgresql/transactional/posgresql.conf:/etc/postgresql/data/postgresql.conf
+      - ./postgresql/transactional/data:/var/lib/postgresql/data
+      - ./postgresql/transactional/postgresql.conf:/var/lib/postgresql/postgresql.conf
     ports:
       - 5432:5432
     networks:
@@ -59,6 +37,34 @@ services:
       POSTGRES_PASSWORD: admin123
       POSTGRES_DB: seguradora
 
+  # APLICACOES HELPERS
+  luigi:
+    build:
+      context: ./pipelines
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/home
+      - ./pipelines:/code
+    ports:
+      - 81:8082
+    networks:
+      - gradi-tp2
+    working_dir: /code
+    command: python3 -m main ImportTask --local-scheduler
+    depends_on:
+      - transactional
+      - datawarehouse
+
+  copy:
+    build:
+      context: ./copy-maker
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/home
+      - ./copy-maker:/code
+    working_dir: /code
+    command: bash
+
   admin:
     image: dpage/pgadmin4
     networks:
@@ -67,7 +73,12 @@ services:
       - 80:80
     networks:
       - gradi-tp2
+    volumes:
+      - ./postgresql/servers.json:/pgadmin4/servers.json
     environment:
       PGADMIN_DEFAULT_EMAIL: "gradi@ufv.br"
       PGADMIN_DEFAULT_PASSWORD: "admin123"
       PGADMIN_CONFIG_CONSOLE_LOG_LEVEL: 40
+    depends_on:
+      - transactional
+      - datawarehouse

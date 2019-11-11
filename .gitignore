@@ -1,3 +1,2 @@
 **/.DS_store
-postgresql/transactional/data
-postgresql/datawarehouse/data
+postgresql/**/data

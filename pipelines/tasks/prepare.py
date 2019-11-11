@@ -8,7 +8,7 @@ class PrepareTask(luigi.Task):
     return []
 
   def output(self):
-    return luigi.LocalTarget('outputs/prepare.txt')
+    return luigi.LocalTarget('output/prepare.txt')
 
   def run(self):
     con, cur, db = get_db()

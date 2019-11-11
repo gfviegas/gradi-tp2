@@ -4,7 +4,7 @@
 -- tables
 -- Table: ano
 CREATE TABLE ano (
-  ano_id INT NOT NULL,
+  ano_id SERIAL NOT NULL,
   ano INT
 );
 
@@ -24,8 +24,8 @@ CREATE TABLE cliente (
 -- Table: seguro
 CREATE TABLE seguro (
   seguro_id INT NOT NULL,
-  valor_segurado DOUBLE PRECISION[],
-  premio DOUBLE PRECISION[],
+  valor_segurado DOUBLE PRECISION,
+  premio DOUBLE PRECISION,
   ano_vigencia INT
 );
 
