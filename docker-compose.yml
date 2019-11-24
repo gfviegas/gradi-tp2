@@ -45,8 +45,8 @@ services:
       context: ./pipelines
       dockerfile: Dockerfile
     volumes:
-      - ./:/home
       - ./pipelines:/code
+      # - ./pipelines/luigi.cfg:/etc/luigi/luigi.cfg
     ports:
       - 81:8082
     networks:
@@ -66,6 +66,18 @@ services:
       - ./copy-maker:/code
     working_dir: /code
     command: bash
+
+  notebooks:
+    build:
+      context: ./notebooks
+      dockerfile: Dockerfile
+    volumes:
+      - ./notebooks:/code
+    working_dir: /code
+    ports:
+      - 82:8888
+    networks:
+      - gradi-tp2
 
   admin:
     image: dpage/pgadmin4
