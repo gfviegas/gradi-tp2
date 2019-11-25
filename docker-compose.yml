@@ -16,10 +16,11 @@ services:
       - 5431:5432
     networks:
       - gradi-tp2
-    environment:
+    environment:      
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin123
       POSTGRES_DB: warehouse
+    shm_size: 128M
 
   transactional:
     image: postgres
@@ -36,6 +37,7 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin123
       POSTGRES_DB: seguradora
+    shm_size: 128M
 
   # APLICACOES HELPERS
   luigi:
@@ -87,7 +89,7 @@ services:
       - gradi-tp2
     volumes:
       - ./postgresql/servers.json:/pgadmin4/servers.json
-    environment:
+    environment:      
       PGADMIN_DEFAULT_EMAIL: "gradi@ufv.br"
       PGADMIN_DEFAULT_PASSWORD: "admin123"
       PGADMIN_CONFIG_CONSOLE_LOG_LEVEL: 40
